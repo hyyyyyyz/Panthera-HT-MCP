@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "panthera-ht-mcp"
+version = "0.0.1"
+description = "MCP server exposing the Panthera-HT 6-axis robotic arm to Claude Code"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.2.0",
+]
+
+[project.scripts]
+panthera-ht-mcp = "panthera_ht_mcp.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/panthera_ht_mcp"]
