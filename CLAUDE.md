@@ -53,15 +53,17 @@ Dev happens **locally**; hardware tests happen **on the remote**.
 
 ## Tool surface
 
-v0 (shipped, read-only):
+Shipped:
 - `arm_get_state` — joint pos/vel/torque, gripper state, end-effector pose
-
-Planned (motion — add only after v0 validated end-to-end):
-- `arm_move_joint` — joint-space goal with duration
-- `arm_move_pose` — Cartesian goal via `moveL`
-- `arm_home` — go to zero
+- `arm_home(duration_s=2.5)` — all joints to 0 rad (min duration 2.0 s)
+- `arm_move_joint(positions_rad, duration_s=2.0)` — joint-space target
+  (validated against `robot.joint_limits`, min duration 1.0 s)
+- `arm_move_pose(position_m, quaternion_xyzw=None, duration_s=2.0)` —
+  Cartesian goal via `moveL`; orientation is kept if quaternion omitted
 - `gripper_open` / `gripper_close`
-- `arm_stop` / emergency
+
+Not yet shipped:
+- `arm_stop` / emergency brake (need to confirm the right SDK call)
 
 ## Running the server
 
