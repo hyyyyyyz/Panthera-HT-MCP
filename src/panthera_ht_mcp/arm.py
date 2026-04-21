@@ -10,6 +10,7 @@ from __future__ import annotations
 import contextlib
 import os
 import sys
+import time
 from pathlib import Path
 from threading import Lock
 from typing import Any
@@ -55,14 +56,19 @@ def get_robot() -> Any:
                 from Panthera_lib import Panthera
 
                 _robot = Panthera()
+                # CAN bus settle time; without it the first state read
+                # returns 999.0 sentinels for joint positions.
+                time.sleep(1.0)
         return _robot
 
 
 def _refresh_state(robot: Any) -> None:
-    # Example 0_robot_get_state.py issues 4 ping cycles before reading.
-    for _ in range(4):
+    # Ping several times with a small pause so get_current_pos() returns
+    # fresh values instead of the SDK's 999.0 not-yet-initialized sentinel.
+    for _ in range(8):
         robot.send_get_motor_state_cmd()
         robot.motor_send_cmd()
+        time.sleep(0.01)
 
 
 def read_state() -> dict[str, Any]:
